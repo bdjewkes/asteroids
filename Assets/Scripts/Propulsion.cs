@@ -34,23 +34,3 @@ public class Propulsion : MonoBehaviour
         rigidbody.velocity = currentVelocity;
     }
 }
-
-/*  Logic for rotation with momentum
- * 
- * 
- *   rateofturn += yaw * turnspeed * Time.deltaTime;
-         rigidbody.AddRelativeTorque(0, yaw * turnspeed * Time.deltaTime, 0);
-         if ( rateofturn >= maxturnspeed)
-         {
-             rateofturn = (maxturnspeed - 0.1f);
-             rigidbody.AddRelativeTorque(0, yaw * turnspeed * -1.0f * Time.deltaTime, 0);
-         }
-         if (rateofturn <= maxturnspeed * -1)
-         {
-              rateofturn = (maxturnspeed * -1 + 0.1f);
-              rigidbody.AddRelativeTorque(0, yaw * turnspeed * -1.0f * Time.deltaTime, 0);
-
-          }
- * 
- * 
-*/
