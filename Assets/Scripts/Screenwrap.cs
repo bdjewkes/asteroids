@@ -19,19 +19,8 @@ public class Screenwrap : MonoBehaviour {
     {
         float x = theCollision.transform.position.x;
         float z = theCollision.transform.position.z;
-<<<<<<< HEAD
         if (wrapHorizontal) x = wrapTo.transform.position.x;
         if (wrapVertical) z = wrapTo.transform.position.z;
-=======
-        if (wrapHorizontal)
-        { 
-            x = wrapTo.transform.position.x;
-        }
-        if (wrapVertical)
-        {
-            z = wrapTo.transform.position.z;
-        }
->>>>>>> 469d02faf86516c2d114832df017bfc373c71dd2
         theCollision.transform.position = new Vector3(x, theCollision.transform.position.y, z);
     }
     void OnDrawGizmosSelected()
