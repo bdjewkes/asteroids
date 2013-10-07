@@ -47,13 +47,25 @@ public class Missile : MonoBehaviour {
     void OnCollisionEnter(Collision theCollision)
     {
         DestructMissile(gameObject);
+        var destructable = theCollision.collider.GetComponent<Destructable>();
+        if (destructable != null)
+        {
+            if (destructable.destruct)
+            {
+                GameObject explode; 
+                explode = Instantiate(destructable.explosion, theCollision.transform.position, theCollision.transform.rotation) as GameObject;
+                Destroy(theCollision.gameObject,2);
+                /*         explode.transform.localscale.x = theCollision.transform.localscale.x;
+                explode.transform.localscale.y = theCollision.transform.localscale.y;
+                explode.transform.localscale.z = theCollision.transform.localscale.z;*/
+            }
+        }
     }
     void DestructMissile(GameObject missile)
     {
         GameObject explode;
         Destroy(gameObject);
         explode = Instantiate(explosion, transform.position, transform.rotation) as GameObject;
-        Destroy(explode, 3);
     }
 
 
