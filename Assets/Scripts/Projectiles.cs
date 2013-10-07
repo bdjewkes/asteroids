@@ -1,29 +1,31 @@
 using UnityEngine;
 using System.Collections;
 
-public class Projectiles : MonoBehaviour {
+public class Projectiles : MonoBehaviour
+{
     public GameObject projectileType;
     public int ammo = 10;
-    public float launchForce=10;
+    public float launchForce = 10;
     public float fireDelay = 1f;
-    public string fire;
+    public string fireButton;
     public bool playerControlled = true;
     bool fireReady = true;
+    bool fire = false;
     float fireTimer;
-  
 
-	void Awake()
+
+    void Awake()
     {
         if (projectileType == null)
         {
             Debug.LogError("Set the projectile type!!");
         }
-        if (!Input.GetButtonDown(fire))
+        if (Input.GetKey(fireButton) == null)
         {
             Debug.LogError("You must set a valid firing button!");
-            fire = "Fire1";
+            fireButton = "Fire1";
         }
-        
+
     }
 
     void Start()
@@ -42,21 +44,25 @@ public class Projectiles : MonoBehaviour {
             fireReady = true;
             fireTimer = 0f;
         }
+        if (Input.GetButtonDown(fireButton) && fireReady && ammo > 0)
+        {
+            fireReady = false;
+            ammo -= 1;
+            fire = true;
+        }
     }
 
-    void FixedUpdate () {
-        if (Input.GetButtonDown(fire))
+    void FixedUpdate()
+    {
+        if (fire)
         {
-            if (ammo > 0 && fireReady)
-            {
-                fireReady = false;
-                ammo -= 1;
-                GameObject projectile;
-                projectile = Instantiate(projectileType, transform.position + transform.forward, transform.rotation) as GameObject;
-                projectile.rigidbody.velocity = rigidbody.velocity;
-                projectile.rigidbody.AddForce(transform.forward * launchForce);   
-            }
+            fire = false;
+            GameObject projectile;
+            projectile = Instantiate(projectileType, transform.position + transform.forward, transform.rotation) as GameObject;
+            projectile.rigidbody.velocity = rigidbody.velocity;
+            projectile.rigidbody.AddForce(transform.forward * launchForce);
         }
 
-    }    
+    }
 }
+
