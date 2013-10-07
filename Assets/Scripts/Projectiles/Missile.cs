@@ -55,9 +55,6 @@ public class Missile : MonoBehaviour {
                 GameObject explode; 
                 explode = Instantiate(destructable.explosion, theCollision.transform.position, theCollision.transform.rotation) as GameObject;
                 Destroy(theCollision.gameObject,2);
-                /*         explode.transform.localscale.x = theCollision.transform.localscale.x;
-                explode.transform.localscale.y = theCollision.transform.localscale.y;
-                explode.transform.localscale.z = theCollision.transform.localscale.z;*/
             }
         }
     }

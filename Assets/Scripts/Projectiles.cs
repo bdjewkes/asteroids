@@ -6,8 +6,11 @@ public class Projectiles : MonoBehaviour {
     public int ammo = 10;
     public float launchForce=10;
     public float fireDelay = 1f;
+    public string fire;
+    public bool playerControlled = true;
     bool fireReady = true;
     float fireTimer;
+  
 
 	void Awake()
     {
@@ -15,6 +18,12 @@ public class Projectiles : MonoBehaviour {
         {
             Debug.LogError("Set the projectile type!!");
         }
+        if (!Input.GetButtonDown(fire))
+        {
+            Debug.LogError("You must set a valid firing button!");
+            fire = "Fire1";
+        }
+        
     }
 
     void Start()
@@ -36,7 +45,7 @@ public class Projectiles : MonoBehaviour {
     }
 
     void FixedUpdate () {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown(fire))
         {
             if (ammo > 0 && fireReady)
             {
