@@ -18,9 +18,9 @@ public class Missile : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
-        ParticleSystem particlesystem = (ParticleSystem)gameObject.GetComponent("ParticleSystem");
-        if (fuel> 0) { particlesystem.enableEmission = true; }
-        else { particlesystem.enableEmission = false; }
+        ParticleSystem particleSystem = (ParticleSystem)gameObject.GetComponent<ParticleSystem>();
+        if (fuel> 0) { particleSystem.enableEmission = true; }
+        else { particleSystem.enableEmission = false; }
     }
 
 	void FixedUpdate () {
@@ -39,30 +39,29 @@ public class Missile : MonoBehaviour {
     IEnumerator MissileTimer(int time,GameObject obj)
     {
         yield return new WaitForSeconds(time);
-        DestructMissile(obj);
+        DestructMissile();
     }
         
 
 
     void OnCollisionEnter(Collision theCollision)
     {
-        DestructMissile(gameObject);
+        DestructMissile();
         var destructable = theCollision.collider.GetComponent<Destructable>();
         if (destructable != null)
         {
             if (destructable.destruct)
             {
-                GameObject explode; 
-                explode = Instantiate(destructable.explosion, theCollision.transform.position, theCollision.transform.rotation) as GameObject;
-                Destroy(theCollision.gameObject,2);
+                Instantiate(destructable.explosion, theCollision.collider.transform.position, theCollision.transform.rotation);
+                Destroy(theCollision.gameObject,0.5f);
             }
         }
     }
-    void DestructMissile(GameObject missile)
+    void DestructMissile()
     {
-        GameObject explode;
         Destroy(gameObject);
-        explode = Instantiate(explosion, transform.position, transform.rotation) as GameObject;
+        Instantiate(explosion, transform.position, transform.rotation);
+        
     }
 
 

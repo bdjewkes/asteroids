@@ -3,26 +3,40 @@ using System.Collections;
 
 
 [RequireComponent(typeof(ParticleSystem))]
+[RequireComponent(typeof(PlayerInput))]
 public class Propulsion : MonoBehaviour
 {
-      public bool active=false;
       public float turnspeed = 5.0f;
-      public float rateofturn;
       public float maxturnspeed = 10f;
       public float thrustPower = 5.0f;
       public float maxVelocity=1f;
-      void Update() // particlesystem behavior
-      {
-           ParticleSystem particlesystem = (ParticleSystem)gameObject.GetComponent("ParticleSystem");
+      string powerButton;
+      string yawButton;
+        
+  
+      float yaw; // the current state of the Yaw axis
+      float forwardThrust; // the current state of the Power axis
 
-           if (Input.GetAxis("Power") > 0) { particlesystem.enableEmission = true; }
+      void Start()
+      {
+          powerButton = GetComponent<PlayerInput>().thrust;
+          yawButton = GetComponent<PlayerInput>().yaw;
+      }
+
+    void Update() 
+      {
+        // Behavior for the particle system
+           ParticleSystem particlesystem = (ParticleSystem)gameObject.GetComponent("ParticleSystem");
+           if (Input.GetAxis(powerButton) > 0) { particlesystem.enableEmission = true; }
            else { particlesystem.enableEmission = false; }
+       
+        // Input behavior
+           yaw = Input.GetAxis(yawButton);
+           forwardThrust = Input.GetAxis(powerButton);
       }
     
     void FixedUpdate()
     {  
-        float yaw = Input.GetAxis("Yaw");
-        float forwardThrust = Input.GetAxis("Power");
         var currentVelocity = rigidbody.velocity;
         currentVelocity += transform.forward * forwardThrust * thrustPower * Time.deltaTime;
         if (currentVelocity.magnitude > maxVelocity)

@@ -1,18 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
-public class Projectiles : MonoBehaviour
+[RequireComponent(typeof(PlayerInput))]
+public class FireControl : MonoBehaviour
 {
     public GameObject projectileType;
     public int ammo = 10;
     public float launchForce = 10;
     public float fireDelay = 1f;
-    public string fireButton;
-    public bool playerControlled = true;
     bool fireReady = true;
     bool fire = false;
+    string fireButton;
     float fireTimer;
-
 
     void Awake()
     {
@@ -20,17 +19,12 @@ public class Projectiles : MonoBehaviour
         {
             Debug.LogError("Set the projectile type!!");
         }
-        if (Input.GetKey(fireButton) == null)
-        {
-            Debug.LogError("You must set a valid firing button!");
-            fireButton = "Fire1";
-        }
-
     }
 
     void Start()
     {
         fireTimer = 0f;
+        fireButton = GetComponent<PlayerInput>().fire;
     }
 
     void Update()
