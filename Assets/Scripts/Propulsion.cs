@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 
-[RequireComponent(typeof(ParticleSystem))]
-[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(ParticleSystem), typeof(PlayerInput), typeof(Rigidbody))]
+
 public class Propulsion : MonoBehaviour
 {
       public float turnspeed = 5.0f;
