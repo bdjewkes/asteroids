@@ -3,22 +3,34 @@ using System.Collections;
 
 [RequireComponent(typeof(FireControl))]
 public class FireAI : MonoBehaviour {
+    
     public bool firewhenready;
     public bool spin;
 
     public float spinperiod = 5.0f;
-    public float spinspeed = 10.0f;
+    public float spinspeed = 1.0f;
     bool fired;
     float startTime;
 
-    public Vector3 leftArc;
+    public Vector3 leftArc; 
     public Vector3 rightArc;
+
+    Quaternion leftRotation; 
+    Quaternion rightRotation;
+    Quaternion nextRotate;
 
     // Use this for initialization
 	void Start () {
-        startTime = Time.time; 
- 	}
-	
+
+        startTime = Time.time;
+        leftRotation =  Quaternion.LookRotation(leftArc);
+        rightRotation = Quaternion.LookRotation(rightArc);
+        nextRotate = rightRotation;
+        Debug.Log("Left Rotation: " + leftRotation.eulerAngles.y);
+        Debug.Log("Right Rotation: " + rightRotation.eulerAngles.y);
+
+    }
+
 	// Update is called once per frame
     
 	void Update () {
@@ -28,24 +40,35 @@ public class FireAI : MonoBehaviour {
         }
         if (spin)
         {
-            if (Time.time - startTime > spinperiod)
-            {
-                spinspeed *= -1;
-                startTime = Time.time;
-            }
-
-            Quaternion leftRotaion = Quaternion.LookRotation(leftArc);
-            Quaternion rightRotation = Quaternion.LookRotation(rightArc);
+           // if (Time.time - startTime > spinperiod)
+           // {
+           //     spinspeed *= -1;
+           //     startTime = Time.time;
+           // }
+            
+            
             //Quaternion.Slerp
             //Mathf.PingPong
-            transform.Rotate(0, spinspeed*Time.deltaTime, 0);
+
+            transform.rotation = nextRotate;
+            if (nextRotate.eulerAngles.y <= rightRotation.eulerAngles.y) nextRotate = leftRotation;
+            if (nextRotate.eulerAngles.y >= leftRotation.eulerAngles.y) nextRotate = rightRotation;
+            Debug.Log(rightRotation.eulerAngles.y);
+            spin = false;
         }
 	}
+
+    void ScanFiringArc()
+    {
+
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + transform.rotation*leftArc);
-        Gizmos.DrawLine(transform.position, transform.position + transform.rotation*rightArc);
+        Gizmos.DrawLine(transform.position, transform.position + transform.parent.rotation*leftArc*5);
+        Gizmos.DrawLine(transform.position, transform.position + transform.parent.rotation*rightArc*5);
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward*10);
 
     }
 }

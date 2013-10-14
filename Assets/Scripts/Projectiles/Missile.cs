@@ -7,7 +7,10 @@ public class Missile : MonoBehaviour {
 
     public float fuel= 3;
     public float thrustPower = 5;
+    public float damage = 5f;
     public GameObject explosion;
+    public float explosiveRange = 3f;    
+
     void Awake()
     {
         if (explosion == null)
@@ -22,6 +25,7 @@ public class Missile : MonoBehaviour {
         if (fuel> 0) { particleSystem.enableEmission = true; }
         else { particleSystem.enableEmission = false; }
     }
+
 
 	void FixedUpdate () {
         bool destructCountDown = false;
@@ -47,22 +51,38 @@ public class Missile : MonoBehaviour {
     void OnCollisionEnter(Collision theCollision)
     {
         DestructMissile();
-        var destructable = theCollision.collider.GetComponent<Destructable>();
-        if (destructable != null)
-        {
-            if (destructable.destruct)
-            {
-                Instantiate(destructable.explosion, theCollision.collider.transform.position, theCollision.transform.rotation);
-                Destroy(theCollision.gameObject,0.5f);
-            }
-        }
     }
     void DestructMissile()
     {
+        ExplosiveDamage();
         Destroy(gameObject);
         Instantiate(explosion, transform.position, transform.rotation);
         
     }
 
+    void ExplosiveDamage()
+    {
+        Collider[] inRange = Physics.OverlapSphere(gameObject.transform.position, explosiveRange);
+        foreach (Collider obj in inRange)
+        {
+            var destructable = obj.GetComponent<Destructable>();
+            if (destructable != null)
+            {
+                Vector3 closestPoint = obj.ClosestPointOnBounds(gameObject.transform.position);
+                float distance = Vector3.Distance(closestPoint, gameObject.transform.position);
+                float explodeDam = (1 - distance / explosiveRange) * damage;
+                destructable.ApplyDamage(explodeDam);
+                Debug.Log(obj.gameObject.name + " " + explodeDam);
+            }
+
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position, explosiveRange);
+
+    }
 
 }

@@ -13,6 +13,29 @@ public class Destructable : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	}
+    public void ApplyDamage(float damage)
+    {
+        if (damage > armor)
+        {
+            hull -= damage;
+        }
+        if (hull <= 0)
+        {
+            Destruct();
+        }
+    }
+    void Destruct()
+    {
+        Instantiate(explosion, collider.transform.position, transform.rotation);
+        Destroy(gameObject, 0.5f);
+    }
+
+
+
+
+
+
+
 }
 
 
