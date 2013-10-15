@@ -63,10 +63,10 @@ public class FireAI : MonoBehaviour {
 
     void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * 8);
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + transform.parent.rotation * rightArc * 5);
-        Gizmos.DrawLine(transform.position, transform.position + transform.parent.rotation * leftArc * 5);
-        Gizmos.DrawLine(transform.position, transform.position + transform.forward*10);
-
+        Gizmos.DrawLine(transform.position, transform.position + (transform.rotation * leftArc));
+        Gizmos.DrawLine(transform.position, transform.position + (transform.rotation * rightArc));
     }
 }
