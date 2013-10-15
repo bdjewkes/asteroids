@@ -23,7 +23,7 @@ public class FireAI : MonoBehaviour {
 	void Start () {
 
         startTime = Time.time;
-        leftRotation =  Quaternion.LookRotation(leftArc);
+        leftRotation = Quaternion.LookRotation(leftArc);
         rightRotation = Quaternion.LookRotation(rightArc);
         nextRotate = rightRotation;
         Debug.Log("Left Rotation: " + leftRotation.eulerAngles.y);
@@ -49,12 +49,10 @@ public class FireAI : MonoBehaviour {
             
             //Quaternion.Slerp
             //Mathf.PingPong
+           // float t = Mathf.PingPong(leftRotati
 
-            transform.rotation = nextRotate;
-            if (nextRotate.eulerAngles.y <= rightRotation.eulerAngles.y) nextRotate = leftRotation;
-            if (nextRotate.eulerAngles.y >= leftRotation.eulerAngles.y) nextRotate = rightRotation;
-            Debug.Log(rightRotation.eulerAngles.y);
-            spin = false;
+            transform.localRotation = Quaternion.Slerp(leftRotation, rightRotation, Mathf.PingPong(Time.time, 1.0f));
+        
         }
 	}
 
@@ -66,8 +64,8 @@ public class FireAI : MonoBehaviour {
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + transform.parent.rotation*leftArc*5);
-        Gizmos.DrawLine(transform.position, transform.position + transform.parent.rotation*rightArc*5);
+        Gizmos.DrawLine(transform.position, transform.position + transform.parent.rotation * rightArc * 5);
+        Gizmos.DrawLine(transform.position, transform.position + transform.parent.rotation * leftArc * 5);
         Gizmos.DrawLine(transform.position, transform.position + transform.forward*10);
 
     }
